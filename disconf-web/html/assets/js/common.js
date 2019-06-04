@@ -36,7 +36,7 @@ function loginActions() {
 function getSession() {
     $.ajax({
         type: "GET",
-        url: "/api/account/session",
+        url: "/disconf/api/account/session",
         timeout: 3000 // 3s timeout
     }).done(function (data) {
         if (data.success === "true") {
@@ -54,7 +54,7 @@ function getSession() {
 function getSession2Redirect() {
     $.ajax({
         type: "GET",
-        url: "/api/account/session"
+        url: "/disconf/api/account/session"
     }).done(function (data) {
         if (data.success === "true") {
             window.location.href = "/main.html";

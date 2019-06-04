@@ -20,7 +20,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/api/account/signin",
+            url: "/disconf/api/account/signin",
             data: {
                 "name": email,
                 "password": pwd,

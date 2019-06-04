@@ -3,7 +3,7 @@
 //
 $.ajax({
     type: "GET",
-    url: "/api/app/list"
+    url: "/disconf/api/app/list"
 }).done(
     function (data) {
         if (data.success === "true") {
@@ -33,7 +33,7 @@ function fetchVersion(appId) {
 
     $.ajax({
         type: "GET",
-        url: "/api/web/config/versionlist?appId=" + appId
+        url: "/disconf/api/web/config/versionlist?appId=" + appId
     }).done(function (data) {
         if (data.success === "true") {
             var html = "";
@@ -62,7 +62,7 @@ function fetchVersion(appId) {
 //
 $.ajax({
     type: "GET",
-    url: "/api/env/list"
+    url: "/disconf/api/env/list"
 }).done(
     function (data) {
         if (data.success === "true") {

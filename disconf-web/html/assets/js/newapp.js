@@ -18,7 +18,7 @@ $("#item_submit").on("click", function (e) {
     }
     $.ajax({
         type: "POST",
-        url: "/api/app",
+        url: "/disconf/api/app",
         data: {
             "app": app,
             "desc": desc,

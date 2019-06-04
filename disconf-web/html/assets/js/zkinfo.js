@@ -9,7 +9,7 @@
     //
     function fetchConfigUsage() {
 
-        url = "/api/usage/list";
+        url = "/disconf/api/usage/list";
 
         $.ajax({
             type: "GET",
