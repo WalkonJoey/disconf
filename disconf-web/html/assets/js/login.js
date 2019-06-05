@@ -31,7 +31,7 @@
                 window.VISITOR = data.result.visitor;
                 $("#loginError").hide();
                 headShowInit();
-                window.location.href = "/main.html";
+                window.location.href = "/disconf/main.html";
             } else {
                 Util.input.whiteError($("#loginError"), data);
                 $("#loginError").show();

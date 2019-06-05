@@ -43,10 +43,10 @@ function getSession() {
             window.VISITOR = data.result.visitor;
             headShowInit();
         } else {
-            window.location.href = "/login.html";
+            window.location.href = "/disconf/login.html";
         }
     }).fail(function (xmlHttpRequest, textStatus) {
-        window.location.href = "/login.html";
+        window.location.href = "/disconf/login.html";
     });
 }
 
@@ -57,7 +57,7 @@ function getSession2Redirect() {
         url: "/disconf/api/account/session"
     }).done(function (data) {
         if (data.success === "true") {
-            window.location.href = "/main.html";
+            window.location.href = "/disconf/main.html";
         } else {
         }
     });
