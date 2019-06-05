@@ -5,14 +5,6 @@ disconf-web
 
 推荐使用最新的Chrome或Firefox浏览.
 
-注：由于迭代开发快速多变的原因，当前UI可能与下图略有改变。
-
-## 开放API
-
-- 让开发者具有自定义定制web控制台界面的能力: [Tutorial12 web开放API](https://github.com/knightliao/disconf/wiki/Tutorial12-web%E5%BC%80%E6%94%BEAPI)  
-
-## 运行样式 ##
-
 ### 主页 ###
 
 ![](http://ww1.sinaimg.cn/mw1024/60c9620fgw1ekdfiw180rj20vt0gawfr.jpg)
@@ -62,11 +54,15 @@ disconf-web
 
 ### 准备配置 ###
 	
+**先将代码下载到服务器** 
+    cd /usr/local
+    git clone https://github.com/WalkonJoey/disconf.git
 **将你的配置文件放到此地址目录下（以下地址可自行设定）：**
-
-	home/work/dsp/disconf-rd/online-resources
+    cd /home
+    mkdir -p work/dsp/disconf-rd/online-resources
+	官方配置放在/home/work/dsp/disconf-rd/online-resources
 **如果不确定如何配置，可以拷贝/disconf-web/profile/rd/目录下的文件，拷贝过去后修改即可。**
-
+    cp /usr/local/disconf/disconf-web/profile/rd/* /home/work/dsp/disconf-rd/online-resources
 配置文件包括：
 
 	- jdbc-mysql.properties (数据库配置)
@@ -87,12 +83,16 @@ disconf-web
 
 
 ### 构建 ###
-
+    vim /etc/profile 在后面加上
 	ONLINE_CONFIG_PATH=/home/work/dsp/disconf-rd/online-resources
 	WAR_ROOT_PATH=/home/work/dsp/disconf-rd/war
 	export ONLINE_CONFIG_PATH
 	export WAR_ROOT_PATH
-	cd disconf-web
+	然后source /etc/profile
+	编译必须按照以下目录来，因为代码里面用到了相对目录
+	cd /usr/local/disconf/disconf-web
+	chmod +x deploy/deploy.sh
+	chmod +x deploy/build_java.sh
 	sh deploy/deploy.sh
 
 这样会在	/home/work/dsp/disconf-rd/war 生成以下结果：
@@ -138,36 +138,36 @@ testUser5 | MhxzKhl112
 启动Tomcat，即可。
 
 ### 部署 前端 ###
-
-修改 nginx.conf
+因为原NG配置会占用整台机器资源，所以将ng请求增加了前缀disconf
+修改 nginx.conf 
 
     upstream disconf {
         server 127.0.0.1:8015;
     }
 
     server {
+        listen   80;
+        server_name  witcream;
+        root /data/ng-root;
+        proxy_set_header   Host             $host;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
 
-        listen   8081;
-        server_name disconf.com;
-        access_log /home/work/var/logs/disconf/access.log;
-        error_log /home/work/var/logs/disconf/error.log;
-
-        location / {
-            root /home/work/dsp/disconf-rd/war/html;
-            if ($query_string) {
-                expires max;
-            }
-        }
-
-        location ~ ^/(api|export) {
-            proxy_pass_header Server;
-            proxy_set_header Host $http_host;
-            proxy_redirect off;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Scheme $scheme;
-            proxy_pass http://disconf;
+        location /disconf {
+                        alias /home/work/dsp/disconf-rd/war/html;
+                        index  index.html index.htm;
+                 }
+        location /disconf/api {
+                proxy_pass_header Server;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Scheme $scheme;
+                proxy_pass http://disconf-api;
         }
     }
+    
+这样配置之后，对于disconf-demos-java工程，需要修改disconf.conf_server_host=nginx-ip:nginx-prot/disconf
     
 ### 关于host
 
